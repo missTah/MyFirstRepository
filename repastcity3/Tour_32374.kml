@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Document>
+    <name>GPS device</name>
+    <Snippet>Created Fri Jan  8 20:04:49 2010</Snippet>
+<!-- Normal track style -->
+    <Style id="track_n">
+      <IconStyle>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track style -->
+    <Style id="track_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal waypoint style -->
+    <Style id="waypoint_n">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted waypoint style -->
+    <Style id="waypoint_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="waypoint">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#waypoint_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#waypoint_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="lineStyle">
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <Folder>
+      <name>Waypoints</name>
+      <Placemark>
+        <name>Camp</name>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>13.194380,46.746032,590.611084</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Emberger</name>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>13.192222,46.746583,588.928955</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>EmbergerSt</name>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>13.149616,46.772534,1737.695557</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>EmbergStSkola</name>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>13.201602,46.761243,1062.134277</coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Tracks</name>
+      <Folder>
+        <name>ACTIVE LOG 019</name>
+        <Snippet/>
+        <description>
+<![CDATA[<table>
+            <tr><td><b>Distance</b> 15.0 mi </td></tr>
+            <tr><td><b>Min Alt</b> 1990.582 ft </td></tr>
+            <tr><td><b>Max Alt</b> 1.370 mi </td></tr>
+            <tr><td><b>Max Speed</b> 35.2 mph </td></tr>
+            <tr><td><b>Avg Speed</b> 9.4 mph </td></tr>
+            <tr><td><b>Start Time</b> 2009-04-10T13:18:55Z  </td></tr>
+            <tr><td><b>End Time</b> 2009-04-10T14:54:13Z  </td></tr>
+          </table>]]>
+        </description>
+        <TimeSpan>
+          <begin>2009-04-10T13:18:55Z</begin>
+          <end>2009-04-10T14:54:13Z</end>
+        </TimeSpan>
+        <Folder>
+          <name>Points</name>
+          <Placemark>
+            <name>ACTIVE LOG 019-0</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: 13.149467 </td></tr>
+                <tr><td>Latitude: 46.772702 </td></tr>
+                <tr><td>Altitude: 1.079 mi </td></tr>
+                <tr><td>Speed: 0.0 mph </td></tr>
+                <tr><td>Heading: 12.1 </td></tr>
+                <tr><td>Time: 2009-04-10T13:18:55Z </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>13.149467</longitude>
+              <latitude>46.772702</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2009-04-10T13:18:55Z</when></TimeStamp>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>13.149467,46.772702,1737.239502</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>ACTIVE LOG 019-1</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: 13.149593 </td></tr>
+                <tr><td>Latitude: 46.772610 </td></tr>
+                <tr><td>Altitude: 1.077 mi </td></tr>
+                <tr><td>Speed: 3.5 mph </td></tr>
+                <tr><td>Heading: 136.7 </td></tr>
+                <tr><td>Time: 2009-04-10T13:19:04Z </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>13.149593</longitude>
+              <latitude>46.772610</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2009-04-10T13:19:04Z</when></TimeStamp>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>13.149593,46.772610,1733.875000</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>ACTIVE LOG 019-2</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: 13.149621 </td></tr>
+                <tr><td>Latitude: 46.772586 </td></tr>
+                <tr><td>Altitude: 1.076 mi </td></tr>
+                <tr><td>Speed: 2.6 mph </td></tr>
+                <tr><td>Heading: 142.5 </td></tr>
+                <tr><td>Time: 2009-04-10T13:19:07Z </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>13.149621</longitude>
+              <latitude>46.772586</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2009-04-10T13:19:07Z</when></TimeStamp>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>13.149621,46.772586,1731.471680</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>ACTIVE LOG 019-3</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: 13.149731 </td></tr>
+                <tr><td>Latitude: 46.772518 </td></tr>
+                <tr><td>Altitude: 1.076 mi </td></tr>
+                <tr><td>Speed: 0.2 mph </td></tr>
+                <tr><td>Heading: 131.8 </td></tr>
+                <tr><td>Time: 2009-04-10T13:21:41Z </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>13.149731</longitude>
+              <latitude>46.772518</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2009-04-10T13:21:41Z</when></TimeStamp>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>13.149731,46.772518,1731.952393</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>ACTIVE LOG 019-4</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: 13.149670 </td></tr>
+                <tr><td>Latitude: 46.772522 </td></tr>
+                <tr><td>Altitude: 1.076 mi </td></tr>
+                <tr><td>Speed: 0.2 mph </td></tr>
+                <tr><td>Heading: 275.7 </td></tr>
+                <tr><td>Time: 2009-04-10T13:22:50Z </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>13.149670</longitude>
+              <latitude>46.772522</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2009-04-10T13:22:50Z</when></TimeStamp>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>13.149670,46.772522,1731.952393</coordinates>
+            </Point>
+          </Placemark>
+        </Folder>
+        <Placemark>
+          <name>Path</name>
+          <styleUrl>#lineStyle</styleUrl>
+          <LineString>
+            <tessellate>1</tessellate>
+            <coordinates>
+              13.149467,46.772702,1737.239502
+              13.149593,46.772610,1733.875000
+              13.149621,46.772586,1731.471680
+              13.149731,46.772518,1731.952393
+              13.149670,46.772522,1731.952393
+            </coordinates>
+          </LineString>
+        </Placemark>
+      </Folder>
+    </Folder>
+  </Document>
+</kml>
