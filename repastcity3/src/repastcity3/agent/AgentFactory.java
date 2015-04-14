@@ -16,8 +16,12 @@ along with RepastCity.  If not, see <http://www.gnu.org/licenses/>.*/
 
 package repastcity3.agent;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.logging.Logger;
+
 
 
 
@@ -116,8 +120,8 @@ import repastcity3.main.GlobalVars;
  * @author Nick Malleson
  * @see DefaultAgent
  */
-public class AgentFactory {
-	public static int CompteurStudent=0;
+public class AgentFactory implements java.io.Serializable{
+	public int CompteurStudent=0;
 	private static Logger LOGGER = Logger.getLogger(AgentFactory.class.getName());
 
 	/** The method to use when creating agents (determined in constructor). */
@@ -189,11 +193,11 @@ public class AgentFactory {
 		int numAgents = -1;
 		try {
 			numAgents = Integer.parseInt(this.definition);
-			
+
 		} catch (NumberFormatException ex) {
 			throw new AgentCreationException("Using " + this.methodToUse + " method to create "
 					+ "agents but cannot convert " + this.definition + " into an integer.");
-			
+
 		}
 		// The definition has been parsed OK, no can either stop or create the agents
 		if (dummy) {
@@ -208,7 +212,7 @@ public class AgentFactory {
 			Iterator<Building> i = ContextManager.buildingContext.getRandomObjects(Building.class, numAgents)
 					.iterator();
 			while (i.hasNext() && agentsCreated < numAgents) {
-				
+
 				/*================== 
 				Class myClass = Class.forName( className ); 
 				IAgent a = (IAgent) myClass.newInstance(); 
@@ -222,6 +226,7 @@ public class AgentFactory {
 				ContextManager.moveAgent(a, ContextManager.buildingProjection.getGeometry(b).getCentroid());
 				agentsCreated++;
 				CompteurStudent=numAgents;
+				serialiseMe();
 			}
 		}
 	}
@@ -253,7 +258,7 @@ public class AgentFactory {
 						+ "able to split the definition into two parts on '$', but only split it into " + split.length
 						+ ". The definition is: '" + this.definition + "'");
 			}
-			 // (Need to append root data directory to the filename).
+			// (Need to append root data directory to the filename).
 			fileName = ContextManager.getProperty(GlobalVars.GISDataDirectory)+split[0];
 			className = split[1];
 			// Try to create a class from the given name.
@@ -279,7 +284,7 @@ public class AgentFactory {
 				if (ContextManager.buildingProjection.getGeometry(b).contains(g)) {
 					b.addAgent(a);
 					a.setHome(b);
-					
+
 				}
 			}
 		}
@@ -296,6 +301,22 @@ public class AgentFactory {
 
 	private void createAreaAgents(boolean dummy) throws AgentCreationException {
 		throw new AgentCreationException("Have not implemented the createAreaAgents method yet.");
+	}
+
+	public void serialiseMe(){ 
+		try
+		{
+			FileOutputStream fileOut = new FileOutputStream("Factory.ser");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(this);
+			out.close();
+			fileOut.close();
+			System.out.println("Serialized data is saved for AgentFactory ");
+		}catch(IOException i)
+		{
+			i.printStackTrace();
+			System.out.println("Serialisation failed for AgentFactory");
+		}
 	}
 
 	/**
@@ -366,8 +387,10 @@ public class AgentFactory {
 		interface CreateAgentMethod {
 			void createagents(boolean dummy, AgentFactory af) throws AgentCreationException;
 
-			
+
 		}
+
+
 	}
 
 }

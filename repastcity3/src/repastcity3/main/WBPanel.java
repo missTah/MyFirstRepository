@@ -54,13 +54,13 @@ public class WBPanel extends JPanel {
 					ma.setHappyLevel(ma.getHappyLevel() + 1);
 				}*/
 				
-				Deserialise d=new Deserialise(AgentFactory.CompteurStudent);
+				/*Deserialise d=new Deserialise(AgentFactory.CompteurStudent);
 				try {
 					d.GoDeserialise();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				}*/
 				
 				
 				GUIRegistry guiRegistry = RunState.getInstance().getGUIRegistry();

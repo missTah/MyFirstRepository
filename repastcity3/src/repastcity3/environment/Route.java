@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with RepastCity.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package repastcity3.environment;
 
@@ -26,6 +26,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -72,6 +73,7 @@ import repastcity3.main.GlobalVars;
  */
 public class Route implements Cacheable, Serializable {
 
+	Calendar javaCalendar = Calendar.getInstance();
 	private static Logger LOGGER = Logger.getLogger(Route.class.getName());
 
 	static {
@@ -94,6 +96,9 @@ public class Route implements Cacheable, Serializable {
 	private List<Coordinate> routeX;
 	private List<Double> routeSpeedsX;
 	private List<Coordinate> agentRoute;
+
+	//Create TimeStamp
+	private List<Date> timestamp=new ArrayList<Date>();
 	/*
 	 * This maps route coordinates to their containing Road, used so that when travelling we know which road/community
 	 * the agent is on. private
@@ -190,6 +195,7 @@ public class Route implements Cacheable, Serializable {
 						+ this.agent.getTransportAvailable().toString()));
 		if (atDestination()) {
 			LOGGER.log(Level.WARNING, "Already at destination, cannot create a route for " + this.agent.toString());
+
 			return;
 		}
 
@@ -272,7 +278,7 @@ public class Route implements Cacheable, Serializable {
 			List<RepastEdge<Junction>> shortestPath = getShortestRoute(currentJunctions, destJunctions, routeEndpoints);
 			// NetworkEdge<Junction> temp = (NetworkEdge<Junction>)
 			//shortestPath.get(0);
-			
+
 			Junction currentJunction = routeEndpoints[0];
 			Junction destJunction = routeEndpoints[1];
 
@@ -336,7 +342,7 @@ public class Route implements Cacheable, Serializable {
 				&& this.roadsX.size() == this.routeDescriptionX.size();
 	}
 
-	
+
 	private void checkListSizes() {
 		assert this.roadsX.size() > 0 && this.roadsX.size() == this.routeX.size()
 				&& this.routeDescriptionX.size() == this.routeSpeedsX.size()
@@ -359,6 +365,7 @@ public class Route implements Cacheable, Serializable {
 	 *            A description of why the coordinate has been added
 	 */
 	private void addToRoute(Coordinate coord, Road road, double speed, String description) {
+		this.timestamp.add(javaCalendar.getTime());
 		this.routeX.add(coord);
 		this.roadsX.add(road);
 		this.routeSpeedsX.add(speed);
@@ -381,13 +388,21 @@ public class Route implements Cacheable, Serializable {
 	 */
 	private void addToRoute(List<Coordinate> coords, Road road, double speed, String description) {
 		for (Coordinate c : coords) {
+
+
+			this.timestamp.add(javaCalendar.getTime());
 			this.routeX.add(c);
 			this.roadsX.add(road);
 			this.routeSpeedsX.add(speed);
 			this.routeDescriptionX.add(description);
 		}
 	}
-/*	public List<Coordinate> listOfRoute() {
+
+	public List <Date> getTimeStamp(){
+		return timestamp;
+
+	}
+	/*	public List<Coordinate> listOfRoute() {
 		return this.routeX;
 	}*/
 
@@ -423,17 +438,17 @@ public class Route implements Cacheable, Serializable {
 				System.out.println("Voici le contenu de la routeX "+this.routeX.get(i));
 			}*/
 
-			
-			
+
+
 		}
 		try {
 			if (this.atDestination()) {
 				return;
 			}
-			
+
 			double time = System.nanoTime();
-			
-			
+
+
 
 			// Store the roads the agent walks along (used to populate the awareness space)
 			// List<Road> roadsPassed = new ArrayList<Road>();
@@ -500,7 +515,7 @@ public class Route implements Cacheable, Serializable {
 				} // else
 			} // while
 
-//			this.printRoute();
+			//			this.printRoute();
 
 			/*
 			 * TODO Agent has finished moving, now just add all the buildings and communities passed to their awareness
@@ -586,10 +601,10 @@ public class Route implements Cacheable, Serializable {
 			throw e;
 		} // catch exception
 	}
-	
+
 	public List<Coordinate> getListRoute(){
 		return this.agentRoute;
-				}
+	}
 
 	/**
 	 * Get the distance (on a network) between the origin and destination. Take into account the Burglar because they
@@ -662,13 +677,13 @@ public class Route implements Cacheable, Serializable {
 					closestDestJunc = j;
 				}
 			} // for Junctions
-				// Return the shortest path plus the distance from the origin/destination to their junctions
-				// TODO NOTE: Bug in ShortestPath so have to make finalize is called, otherwise following lines are
-				// neater
-				// - MAYBE THIS HAS BEEN FIXED BY REPAST NOW.
-				// return (new ShortestPath<Junction>(EnvironmentFactory.getRoadNetwork(),
-				// closestOriginJunc)).getPathLength(closestDestJunc)+ minOriginDist + minDestDist ;
-				// TODO : using non-deprecated methods don't work on NGS, probably need to update repast libraries
+			// Return the shortest path plus the distance from the origin/destination to their junctions
+			// TODO NOTE: Bug in ShortestPath so have to make finalize is called, otherwise following lines are
+			// neater
+			// - MAYBE THIS HAS BEEN FIXED BY REPAST NOW.
+			// return (new ShortestPath<Junction>(EnvironmentFactory.getRoadNetwork(),
+			// closestOriginJunc)).getPathLength(closestDestJunc)+ minOriginDist + minDestDist ;
+			// TODO : using non-deprecated methods don't work on NGS, probably need to update repast libraries
 			ShortestPath<Junction> p = new ShortestPath<Junction>(ContextManager.roadNetwork, closestOriginJunc);
 			double theDist = p.getPathLength(closestDestJunc);
 			// ShortestPath<Junction> p = new
@@ -760,10 +775,10 @@ public class Route implements Cacheable, Serializable {
 						if (pathLength < shortestPathLength) {
 							shortestPathLength = pathLength;
 							shortestPath = p.getPath(o,d);
-//							ShortestPath<Junction> p2 = new ShortestPath<Junction>(ContextManager.roadNetwork);
-//							shortestPath = p2.getPath(o, d);
-//							p2.finalize();
-//							p2 = null;
+							//							ShortestPath<Junction> p2 = new ShortestPath<Junction>(ContextManager.roadNetwork);
+							//							shortestPath = p2.getPath(o, d);
+							//							p2.finalize();
+							//							p2 = null;
 							// shortestPath = p1.getPath(o, d);
 							// p1.finalize(); p1 = null;
 							routeEndpoints[0] = o;
@@ -984,7 +999,7 @@ public class Route implements Cacheable, Serializable {
 					speed = 1;
 
 				if (r == null) { // No road associated with this edge (it is a
-									// transport link) so just add source
+					// transport link) so just add source
 					if (sourceFirst) {
 						this.addToRoute(e.getSource().getCoords(), r, speed, "getRouteBetweenJunctions - no road");
 						this.addToRoute(e.getTarget().getCoords(), r, -1, "getRouteBetweenJunctions - no road");
@@ -1103,7 +1118,7 @@ public class Route implements Cacheable, Serializable {
 		LOGGER.info(out.toString());
 	}
 
-	
+
 	/**
 	 * Find the nearest object in the given geography to the coordinate.
 	 * 
@@ -1124,7 +1139,7 @@ public class Route implements Cacheable, Serializable {
 	 */
 	public static synchronized <T> T findNearestObject(Coordinate x, Geography<T> geography,
 			List<Coordinate> closestPoints, GlobalVars.GEOGRAPHY_PARAMS.BUFFER_DISTANCE searchDist)
-			throws RoutingException {
+					throws RoutingException {
 		if (x == null) {
 			throw new RoutingException("The input coordinate is null, cannot find the nearest object");
 		}
@@ -1239,7 +1254,7 @@ public class Route implements Cacheable, Serializable {
 					"Route.populateCoordCache called for first time, creating new cache of all Road coordinates.");
 		}
 		if (coordCache.size() == 0) { // Now popualte it if it hasn't already
-										// been populated
+			// been populated
 			LOGGER.log(Level.FINER, "Route.populateCoordCache: is empty, creating new cache of all Road coordinates.");
 
 			for (Road r : ContextManager.roadContext.getObjects(Road.class)) {
@@ -1439,7 +1454,7 @@ class BuildingsOnRoadCache implements Serializable {
 	// Private constructor because getInstance() should be used
 	private BuildingsOnRoadCache(Geography<Building> buildingEnvironment, File buildingsFile,
 			Geography<Road> roadEnvironment, File roadsFile, File serialisedLoc, GeometryFactory geomFac)
-			throws Exception {
+					throws Exception {
 		// this.buildingEnvironment = buildingEnvironment;
 		// this.roadEnvironment = roadEnvironment;
 		this.buildingsFile = buildingsFile;
@@ -1482,7 +1497,7 @@ class BuildingsOnRoadCache implements Serializable {
 					closestRoad = r;
 				}
 			} // for roads
-				// Found the closest road, add the information to the cache
+			// Found the closest road, add the information to the cache
 			if (theCache.containsKey(closestRoad)) {
 				theCache.get(closestRoad).add(b);
 				this.referenceCache.get(closestRoad.getIdentifier()).add(b.getIdentifier());
@@ -1638,7 +1653,7 @@ class NearestRoadCoordCache implements Serializable {
 
 	private NearestRoadCoordCache(Geography<Building> buildingEnvironment, File buildingsFile,
 			Geography<Road> roadEnvironment, File roadsFile, File serialisedLoc, GeometryFactory geomFac)
-			throws Exception {
+					throws Exception {
 
 		this.buildingsFile = buildingsFile;
 		this.roadsFile = roadsFile;
@@ -1927,7 +1942,7 @@ class CachedRouteDistance {
 	private Coordinate destination;
 	private List<String> transportAvailable;
 	private static int uniqueRouteCacheID; // Used to generate hash codes (each
-											// route must have unique ID)
+	// route must have unique ID)
 	private int uniqueID;
 
 	// private List<Coord> theRoute; // The actual route (a list of coords)
@@ -1967,8 +1982,8 @@ class CachedRouteDistance {
 	public int hashCode() {
 		return Float.floatToIntBits((float) (this.origin.x + this.origin.y));
 	}
-	
-	
+
+
 }
 
 /**
