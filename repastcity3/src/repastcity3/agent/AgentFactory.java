@@ -120,8 +120,8 @@ import repastcity3.main.GlobalVars;
  * @author Nick Malleson
  * @see DefaultAgent
  */
-public class AgentFactory implements java.io.Serializable{
-	public int CompteurStudent=0;
+public class AgentFactory {
+	public static int CompteurStudent=0;
 	private static Logger LOGGER = Logger.getLogger(AgentFactory.class.getName());
 
 	/** The method to use when creating agents (determined in constructor). */

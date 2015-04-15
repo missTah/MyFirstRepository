@@ -23,6 +23,7 @@ import repast.simphony.visualization.IDisplay;
 import repastcity3.agent.AgentFactory;
 
 import java.awt.BorderLayout;
+import java.io.FileNotFoundException;
 
 /**
  * Custom Controls and Displays Demo Advance Repast Course 2013
@@ -48,6 +49,14 @@ public class WBPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				lblHello.setText("Thanks!");
 				Context context = RepastEssentials.FindContext("UserPanelProject");
+				intoKml ceci=new intoKml();
+				try {
+					ceci.go();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				/*Iterable<MyAgent> iter = context.getObjects(MyAgent.class);
 				
 				for (MyAgent ma : iter){
