@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -25,8 +26,6 @@ import org.geotools.xml.Encoder;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.Coordinate;
-
-
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
@@ -54,14 +53,14 @@ public class Student implements IAgent,java.io.Serializable{
 
 	//list that content the coordinate of the current position of the agent
 	private List<Coordinate> currentCoord;
-	private List<Date> currentTimeStamp;
+	private List<Instant> currentTimeStamp;
 
 
 	//ArrayList that content the trajectory of the agent
 	private ArrayList<List<Coordinate>> pathschedule=new ArrayList<List<Coordinate>>();
 
 	//ArrayList of all timestamp
-	private ArrayList<List<Date>> allTimeStamp=new ArrayList<List<Date>>();
+	private ArrayList<List<Instant>> allTimeStamps=new ArrayList<List<Instant>>();
 
 
 	public Student(){
@@ -92,6 +91,7 @@ public class Student implements IAgent,java.io.Serializable{
 
 			System.out.println(this.toString() + " created new route to " + b.toString());
 			LOGGER.log(Level.FINE, this.toString() + " created new route to " + b.toString());
+			System.out.println("created new route to " + b.toString());
 		}
 
 		if (!this.route.atDestination()) {
@@ -107,7 +107,7 @@ public class Student implements IAgent,java.io.Serializable{
 			//Store all the trajectory of the agent inside an arrayList
 			setpathSchedule();
 			setAllTimeStamp(currentTimeStamp);
-			//this.featureCollectionToKML();
+			
 
 
 
@@ -123,6 +123,7 @@ public class Student implements IAgent,java.io.Serializable{
 
 
 				this.route = new Route(this, b.getCoords(), b);
+				System.out.println("created new route to " + b.toString());
 
 
 
@@ -135,6 +136,7 @@ public class Student implements IAgent,java.io.Serializable{
 						+ ", now going home");
 				this.goingHome = true;
 				this.route = new Route(this, this.home.getCoords(), this.home);
+				System.out.println("created new route to " + b.toString());
 			}
 
 
@@ -169,12 +171,12 @@ public class Student implements IAgent,java.io.Serializable{
 		this.currentTimeStamp=this.route.getTimeStamp();
 	}
 
-	public void setAllTimeStamp(List<Date> currentTimeStampList){
-		this.allTimeStamp.add(currentTimeStampList);
+	public void setAllTimeStamp(List<Instant> currentTimeStamp2){
+		this.allTimeStamps.add(currentTimeStamp2);
 	}
 
-	public ArrayList<List<Date>> getAllTimeStamp(){
-		return this.allTimeStamp;
+	public ArrayList<List<Instant>> getAllTimeStamp(){
+		return this.allTimeStamps;
 	}
 
 	//Store all the trajectory of the agent inside an arrayList

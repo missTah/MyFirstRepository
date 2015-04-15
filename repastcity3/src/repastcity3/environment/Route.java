@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,6 +42,7 @@ import org.geotools.referencing.GeodeticCalculator;
 
 import cern.colt.Arrays;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
@@ -74,6 +76,10 @@ import repastcity3.main.GlobalVars;
 public class Route implements Cacheable, Serializable {
 
 	Calendar javaCalendar = Calendar.getInstance();
+	//java.text.SimpleDateFormat timestp = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+	
+	private List<Instant>tmstp=new ArrayList<Instant>();
+	//private Date tm;
 	private static Logger LOGGER = Logger.getLogger(Route.class.getName());
 
 	static {
@@ -98,7 +104,7 @@ public class Route implements Cacheable, Serializable {
 	private List<Coordinate> agentRoute;
 
 	//Create TimeStamp
-	private List<Date> timestamp=new ArrayList<Date>();
+	//private List<Date> timestamp=new ArrayList<Date>();
 	/*
 	 * This maps route coordinates to their containing Road, used so that when travelling we know which road/community
 	 * the agent is on. private
@@ -365,7 +371,7 @@ public class Route implements Cacheable, Serializable {
 	 *            A description of why the coordinate has been added
 	 */
 	private void addToRoute(Coordinate coord, Road road, double speed, String description) {
-		this.timestamp.add(javaCalendar.getTime());
+		//this.timestamp.add(javaCalendar.getTime());
 		this.routeX.add(coord);
 		this.roadsX.add(road);
 		this.routeSpeedsX.add(speed);
@@ -390,7 +396,7 @@ public class Route implements Cacheable, Serializable {
 		for (Coordinate c : coords) {
 
 
-			this.timestamp.add(javaCalendar.getTime());
+			//this.timestamp.add(javaCalendar.getTime());
 			this.routeX.add(c);
 			this.roadsX.add(road);
 			this.routeSpeedsX.add(speed);
@@ -398,9 +404,13 @@ public class Route implements Cacheable, Serializable {
 		}
 	}
 
-	public List <Date> getTimeStamp(){
+	/*public List <Date> getTimeStamp(){
 		return timestamp;
 
+	}*/
+	
+	public List<Instant>getTimeStamp(){
+		return tmstp;
 	}
 	/*	public List<Coordinate> listOfRoute() {
 		return this.routeX;
@@ -431,16 +441,7 @@ public class Route implements Cacheable, Serializable {
 		if (this.routeX == null) {
 			this.setRoute();
 			agentRoute=routeX;
-			/*for(int i = 0; i < this.agentRoute.size(); i++) {
-				System.out.println("Voici le contenu de la agentroute "+this.agentRoute.get(i));
 			}
-			for(int i = 0; i < this.routeX.size(); i++) {
-				System.out.println("Voici le contenu de la routeX "+this.routeX.get(i));
-			}*/
-
-
-
-		}
 		try {
 			if (this.atDestination()) {
 				return;
@@ -463,6 +464,11 @@ public class Route implements Cacheable, Serializable {
 			while (!travelledMaxDist && !this.atDestination()) {
 				target = this.routeX.get(this.currentPosition);
 				speed = this.routeSpeedsX.get(this.currentPosition);
+				//tm=javaCalendar.getTime();
+				//tmstp.add(tm);
+				Instant instant = Instant.now();
+				System.out.println("================================le temps est: "+instant);
+				tmstp.add(instant);
 				/*
 				 * TODO Remember which roads have been passed, used to work out what should be added to cognitive map.
 				 * Only add roads once the agent has moved all the way down them

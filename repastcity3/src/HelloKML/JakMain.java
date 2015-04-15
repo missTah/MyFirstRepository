@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class JakMain {
 
 
 
-		Date dt;
+		Instant dt;
 		Document document = kml.createAndSetDocument().withName("MyMarkers");
 
 
@@ -98,7 +99,7 @@ public class JakMain {
 			System.out.println("Serial number: " + s.uniqueID);
 			System.out.println("Name: " + s.toString());
 			List<com.vividsolutions.jts.geom.Coordinate> current;
-			List<Date> currentListTmstp;
+			List<Instant> currentListTmstp;
 			String couleur=generateColor();
 
 			for(int i = 0; i < s.getpathSchedule().size(); i++) {
@@ -127,10 +128,10 @@ public class JakMain {
 					placemark.setGeometry(point);
 
 					//TimeStamp format
-					SimpleDateFormat timestp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"+a+"'Z'");
+					//SimpleDateFormat timestp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"+a+"'Z'");
 
 					dt=currentListTmstp.get(j);
-					placemark.createAndSetTimeStamp().setWhen(timestp.format(dt));
+					placemark.createAndSetTimeStamp().setWhen(dt.toString());
 
 					// IconStyle
 					IconStyle ic= placemark.createAndAddStyle().createAndSetIconStyle();
@@ -149,13 +150,10 @@ public class JakMain {
 					icone.setRefreshInterval(0.5);
 					icone.setViewRefreshTime(0.5);
 					icone.setHref("http://maps.google.com/mapfiles/ms/icons/cabs.png");
-					//icone.setHref("http://maps.google.com/mapfiles/kml/shapes/placemark_circle_highlight.png");
-
-
-					//kml.setFeature(placemark);	
+					
 					document.addToFeature(placemark);
 
-					//kml.addToKmlSimpleExtension(placemark);
+					
 					a++;
 
 				}
