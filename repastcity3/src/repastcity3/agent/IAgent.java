@@ -94,7 +94,7 @@ public interface IAgent {
 	void getCurrentRoute();
 		
 	//Store all the trajectory of the agent inside an arrayList
-	void setpathSchedule() throws FileNotFoundException;
+	void setpathSchedule(int compt) throws FileNotFoundException;
 	
 	//Return the arrayList of all the agent trajectories
 	public ArrayList<List<Coordinate>> getpathSchedule();

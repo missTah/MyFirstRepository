@@ -116,7 +116,8 @@ public class DefaultAgent implements IAgent, Serializable {
 			LOGGER.log(Level.FINE, this.toString() + " travelling to " + this.route.getDestinationBuilding().toString());
 		} else {
 			//Store all the trajectory of the agent inside an arrayList
-			setpathSchedule();
+			int a=0;
+			setpathSchedule(a);
 			//this.featureCollectionToKML();
 		
 
@@ -212,7 +213,7 @@ public class DefaultAgent implements IAgent, Serializable {
 	}
 
 	@Override
-	public void setpathSchedule() throws FileNotFoundException {
+	public void setpathSchedule(int compt) throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		this.pathschedule.add(currentCoord);
 		

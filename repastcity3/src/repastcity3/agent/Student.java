@@ -50,6 +50,7 @@ public class Student implements IAgent,java.io.Serializable{
 
 	public static int uniqueID = 0;
 	private int id;
+	private static int compteur=0;
 
 	//list that content the coordinate of the current position of the agent
 	private List<Coordinate> currentCoord;
@@ -100,14 +101,17 @@ public class Student implements IAgent,java.io.Serializable{
 			//Pick up the trajectory of the agent from his current place to his destination
 			setCurrentRoute();
 			setCurrentTimeStamp();
+			
+			setpathSchedule(compteur);
+			setAllTimeStamp(compteur,currentTimeStamp);
 
 
 			LOGGER.log(Level.FINE, this.toString() + " travelling to " + this.route.getDestinationBuilding().toString());
 		} else {
 			
 			//Store all the trajectory of the agent inside an arrayList
-			setpathSchedule();
-			setAllTimeStamp(currentTimeStamp);
+			compteur++;
+			
 			
 
 
@@ -172,8 +176,15 @@ public class Student implements IAgent,java.io.Serializable{
 		this.currentTimeStamp=this.route.getTimeStamp();
 	}
 
-	public void setAllTimeStamp(List<Instant> currentTimeStamp2){
-		this.allTimeStamps.add(currentTimeStamp2);
+	public void setAllTimeStamp(int compt, List<Instant> currentTimeStamp2){
+		if (this.allTimeStamps.size()==compt){
+			this.allTimeStamps.add(currentTimeStamp2);
+		}
+		else
+		{
+			this.allTimeStamps.set(compt,currentTimeStamp2);
+		}
+		
 	}
 
 	public ArrayList<List<Instant>> getAllTimeStamp(){
@@ -181,9 +192,17 @@ public class Student implements IAgent,java.io.Serializable{
 	}
 
 	//Store all the trajectory of the agent inside an arrayList
-	public void setpathSchedule() throws FileNotFoundException{
+	public void setpathSchedule(int compt) throws FileNotFoundException{
+		System.out.println("PATHSCHEDULE SIZE...."+this.pathschedule.size());
 		//List<Coordinate> current;
-		this.pathschedule.add(currentCoord);
+		if (this.pathschedule.size()==compt){
+			this.pathschedule.add(currentCoord);
+			
+		}
+		else{
+			this.pathschedule.set(compt,currentCoord);
+		}
+		
 		/*for(int i = 0; i < this.pathschedule.size(); i++) {
 			current=this.pathschedule.get(i);
 			for(int j = 0; j < current.size(); j++){

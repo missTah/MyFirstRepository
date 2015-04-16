@@ -625,6 +625,14 @@ public class ContextManager implements ContextBuilder<Object> {
 	     exp.featureCollectionToKML();*/
 		/*Deserialise d=new Deserialise(AgentFactory.CompteurStudent);
 		d.GoDeserialise();*/
+		
+		intoKml ceci=new intoKml();
+		try {
+			ceci.go();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 			     
 	     System.out.println("End of the simulation");
 		
