@@ -104,6 +104,7 @@ public class Student implements IAgent,java.io.Serializable{
 
 			LOGGER.log(Level.FINE, this.toString() + " travelling to " + this.route.getDestinationBuilding().toString());
 		} else {
+			
 			//Store all the trajectory of the agent inside an arrayList
 			setpathSchedule();
 			setAllTimeStamp(currentTimeStamp);

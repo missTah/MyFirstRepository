@@ -75,11 +75,10 @@ import repastcity3.main.GlobalVars;
  */
 public class Route implements Cacheable, Serializable {
 
-	Calendar javaCalendar = Calendar.getInstance();
-	//java.text.SimpleDateFormat timestp = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	
+	//List of the timeStamp
 	private List<Instant>tmstp=new ArrayList<Instant>();
-	//private Date tm;
+	
 	private static Logger LOGGER = Logger.getLogger(Route.class.getName());
 
 	static {
@@ -101,7 +100,7 @@ public class Route implements Cacheable, Serializable {
 	private int currentPosition;
 	private List<Coordinate> routeX;
 	private List<Double> routeSpeedsX;
-	private List<Coordinate> agentRoute;
+	private List<Coordinate> agentRoute=new ArrayList<Coordinate>();
 
 	//Create TimeStamp
 	//private List<Date> timestamp=new ArrayList<Date>();
@@ -404,10 +403,6 @@ public class Route implements Cacheable, Serializable {
 		}
 	}
 
-	/*public List <Date> getTimeStamp(){
-		return timestamp;
-
-	}*/
 	
 	public List<Instant>getTimeStamp(){
 		return tmstp;
@@ -440,10 +435,13 @@ public class Route implements Cacheable, Serializable {
 		// Check that the route has been created
 		if (this.routeX == null) {
 			this.setRoute();
-			agentRoute=routeX;
+			//agentRoute=routeX;
 			}
 		try {
 			if (this.atDestination()) {
+				Instant instant = Instant.now();
+				System.out.println("================================le temps à destination est: "+instant);
+				tmstp.add(instant);
 				return;
 			}
 
@@ -464,10 +462,13 @@ public class Route implements Cacheable, Serializable {
 			while (!travelledMaxDist && !this.atDestination()) {
 				target = this.routeX.get(this.currentPosition);
 				speed = this.routeSpeedsX.get(this.currentPosition);
-				//tm=javaCalendar.getTime();
-				//tmstp.add(tm);
+				
+				
+				//Pick up the current instant
 				Instant instant = Instant.now();
 				System.out.println("================================le temps est: "+instant);
+				agentRoute.add(currentCoord);
+				System.out.println("POSITION ACTUELLE: "+currentCoord);
 				tmstp.add(instant);
 				/*
 				 * TODO Remember which roads have been passed, used to work out what should be added to cognitive map.
