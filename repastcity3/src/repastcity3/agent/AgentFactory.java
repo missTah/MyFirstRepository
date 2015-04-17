@@ -16,26 +16,9 @@ along with RepastCity.  If not, see <http://www.gnu.org/licenses/>.*/
 
 package repastcity3.agent;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+
 import java.util.Iterator;
 import java.util.logging.Logger;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -121,7 +104,8 @@ import repastcity3.main.GlobalVars;
  * @see DefaultAgent
  */
 public class AgentFactory {
-	public static int CompteurStudent=0;
+	//public static int CompteurStudent=0;
+	//public static int TotalAgent=0;
 	private static Logger LOGGER = Logger.getLogger(AgentFactory.class.getName());
 
 	/** The method to use when creating agents (determined in constructor). */
@@ -129,6 +113,9 @@ public class AgentFactory {
 
 	/** The definition of the agents - specific to the method being used */
 	private String definition;
+
+	//Pick up the number of each type of agents
+	public static int nbrStudent=0,nbrDefaultAgent=0;
 
 	/**
 	 * Create a new agent factory from the given definition.
@@ -216,7 +203,12 @@ public class AgentFactory {
 				/*================== 
 				Class myClass = Class.forName( className ); 
 				IAgent a = (IAgent) myClass.newInstance(); 
+				
+				Parameters params = RunEnvironment.getInstance().getParameters();
+
+				System.out.println(params.getSchema().parameterNames());
 				//==================*/
+				
 				Building b = i.next(); // Find a building
 				IAgent a = new Student(); // Create a new agent
 				a.setHome(b); // Tell the agent where it lives
@@ -225,8 +217,11 @@ public class AgentFactory {
 				// Finally move the agent to the place where it lives.
 				ContextManager.moveAgent(a, ContextManager.buildingProjection.getGeometry(b).getCentroid());
 				agentsCreated++;
-				CompteurStudent=numAgents;
-				serialiseMe();
+				
+				//CompteurStudent=numAgents;
+				nbrStudent=numAgents;//Total of student agent in the simulation
+				//TotalAgent=nbrStudent+nbrDefaultAgent;//Total number of agents in the simulation
+
 			}
 		}
 	}
@@ -279,6 +274,8 @@ public class AgentFactory {
 		int numAgents = 0;
 		for (IAgent a : ContextManager.getAllAgents()) {
 			numAgents++;
+			nbrDefaultAgent=numAgents;
+			//TotalAgent=nbrStudent+nbrDefaultAgent;
 			Geometry g = ContextManager.getAgentGeometry(a);
 			for (Building b : SpatialIndexManager.search(ContextManager.buildingProjection, g)) {
 				if (ContextManager.buildingProjection.getGeometry(b).contains(g)) {
@@ -303,21 +300,7 @@ public class AgentFactory {
 		throw new AgentCreationException("Have not implemented the createAreaAgents method yet.");
 	}
 
-	public void serialiseMe(){ 
-		try
-		{
-			FileOutputStream fileOut = new FileOutputStream("Factory.ser");
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(this);
-			out.close();
-			fileOut.close();
-			System.out.println("Serialized data is saved for AgentFactory ");
-		}catch(IOException i)
-		{
-			i.printStackTrace();
-			System.out.println("Serialisation failed for AgentFactory");
-		}
-	}
+
 
 	/**
 	 * The methods that can be used to create agents. The CreateAgentMethod stuff is just a long-winded way of

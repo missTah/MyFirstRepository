@@ -1,7 +1,6 @@
 package repastcity3.main;
 
 import javax.swing.JPanel;
-import javax.swing.JComboBox;
 import javax.swing.JButton;
 
 import java.awt.Container;
@@ -13,16 +12,12 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.JTextField;
 
-import HelloKML.export;
 import repast.simphony.context.Context;
 import repast.simphony.engine.environment.GUIRegistry;
 import repast.simphony.engine.environment.RunState;
 import repast.simphony.essentials.RepastEssentials;
-import repast.simphony.util.ContextUtils;
 import repast.simphony.visualization.IDisplay;
-import repastcity3.agent.AgentFactory;
 
-import java.awt.BorderLayout;
 import java.io.FileNotFoundException;
 
 /**
@@ -42,36 +37,27 @@ public class WBPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public WBPanel() {
-		
+
 		btnPressMe = new JButton("Export into KML");
 		btnPressMe.setBounds(5, 50, 200, 25);
+
+		//addActionListener for the button
 		btnPressMe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblHello.setText("Thanks!");
-				Context context = RepastEssentials.FindContext("UserPanelProject");
-				intoKml ceci=new intoKml();
+				//Context context = RepastEssentials.FindContext("UserPanelProject");
+
+				//On click on the button, export the simulation into KML
+				intoKml exportSimulation=new intoKml();
 				try {
-					ceci.go();
+					exportSimulation.go();
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-				/*Iterable<MyAgent> iter = context.getObjects(MyAgent.class);
-				
-				for (MyAgent ma : iter){
-					ma.setHappyLevel(ma.getHappyLevel() + 1);
-				}*/
-				
-				/*Deserialise d=new Deserialise(AgentFactory.CompteurStudent);
-				try {
-					d.GoDeserialise();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
-				
-				
+
+
+
 				GUIRegistry guiRegistry = RunState.getInstance().getGUIRegistry();
 				for (IDisplay display : guiRegistry.getDisplays()){
 					display.update();
@@ -80,12 +66,12 @@ public class WBPanel extends JPanel {
 			}
 		});
 		setLayout(null);
-		
+
 		lblHello = new JLabel("Hello!");
 		lblHello.setBounds(0, 0, 134, 16);
 		//add(lblHello);
 		add(btnPressMe);
-		
+
 		txtTextPanel = new JTextField();
 		txtTextPanel.setBounds(67, 164, 134, 28);
 		txtTextPanel.setText("text panel");
@@ -96,11 +82,11 @@ public class WBPanel extends JPanel {
 			@Override
 			public void ancestorRemoved(AncestorEvent event) {
 			}
-			
+
 			@Override
 			public void ancestorMoved(AncestorEvent event) {
 			}
-			
+
 			@Override
 			public void ancestorAdded(AncestorEvent event) {
 				Container ancestor = event.getAncestor();

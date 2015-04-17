@@ -6,7 +6,7 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
-				<parameter name="AGENT_DEFINITION" displayName="Agent Definition" type="java.lang.String" 
+					<parameter name="AGENT_DEFINITION" displayName="Agent Definition" type="java.lang.String" 
 						defaultValue="point:people.shp$repastcity3.agent.DefaultAgent" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
@@ -14,7 +14,7 @@
 		/>
 		
 						<parameter name="STUDENT_DEFINITION" displayName="Student Definition" type="java.lang.String" 
-						defaultValue="point:people.shp$repastcity3.agent.Student" 
+						defaultValue="random:5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
 									

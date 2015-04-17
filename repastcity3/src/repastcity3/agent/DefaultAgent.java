@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,7 +36,7 @@ import repastcity3.environment.Route;
 import repastcity3.exceptions.NoIdentifierException;
 import repastcity3.main.ContextManager;
 
-public class DefaultAgent implements IAgent, Serializable {
+public class DefaultAgent extends AgentClass {
 
 	private static Logger LOGGER = Logger.getLogger(DefaultAgent.class.getName());
 
@@ -46,12 +47,18 @@ public class DefaultAgent implements IAgent, Serializable {
 
 	private static int uniqueID = 0;
 	private int id;
-	
+	private static int compteur=0;
+
 	//list that content the coordinate of the current position of the agent
 	private List<Coordinate> currentCoord;
-		
+	private List<Instant> currentTimeStamp;
+
+
 	//ArrayList that content the trajectory of the agent
 	private ArrayList<List<Coordinate>> pathschedule=new ArrayList<List<Coordinate>>();
+
+	//ArrayList of all timestamp
+	private ArrayList<List<Instant>> allTimeStamps=new ArrayList<List<Instant>>();
 
 
 	public DefaultAgent() {
@@ -110,14 +117,18 @@ public class DefaultAgent implements IAgent, Serializable {
 			this.route.travel();
 			
 			//Pick up the trajectory of the agent from his current place to his destination
-			getCurrentRoute();
+			setCurrentRoute();
+			setCurrentTimeStamp();
+			
+			setpathSchedule(compteur);
+			setAllTimeStamp(compteur,currentTimeStamp);
 			
 			
 			LOGGER.log(Level.FINE, this.toString() + " travelling to " + this.route.getDestinationBuilding().toString());
 		} else {
 			//Store all the trajectory of the agent inside an arrayList
-			int a=0;
-			setpathSchedule(a);
+			
+			compteur++;
 			//this.featureCollectionToKML();
 		
 
@@ -211,12 +222,55 @@ public class DefaultAgent implements IAgent, Serializable {
 		//System.out.println("OLAH OLAH OLAH: "+ b.getCommune());
 			return b;
 	}
+	public void setCurrentRoute() {
 
-	@Override
-	public void setpathSchedule(int compt) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		this.pathschedule.add(currentCoord);
+		this.currentCoord=this.route.getListRoute();
+
+	}
+
+	public void setCurrentTimeStamp(){
+		this.currentTimeStamp=this.route.getTimeStamp();
+	}
+
+	public void setAllTimeStamp(int compt, List<Instant> currentTimeStamp2){
+		if (this.allTimeStamps.size()==compt){
+			this.allTimeStamps.add(currentTimeStamp2);
+		}
+		else
+		{
+			this.allTimeStamps.set(compt,currentTimeStamp2);
+		}
 		
+	}
+
+	public ArrayList<List<Instant>> getAllTimeStamp(){
+		return this.allTimeStamps;
+	}
+	
+	public void setpathSchedule(int compt) throws FileNotFoundException{
+		System.out.println("PATHSCHEDULE SIZE...."+this.pathschedule.size());
+		//List<Coordinate> current;
+		if (this.pathschedule.size()==compt){
+			this.pathschedule.add(currentCoord);
+			
+		}
+		else{
+			this.pathschedule.set(compt,currentCoord);
+		}
+		
+		/*for(int i = 0; i < this.pathschedule.size(); i++) {
+			current=this.pathschedule.get(i);
+			for(int j = 0; j < current.size(); j++){
+				System.out.println(this.toString()+" Voici le contenu de la route, trajet numero "+i+" coordonnées "+current.get(j));		
+
+			}
+			System.out.println("PAUSE");
+	};*/
+
+
+
+
+
 	}
 
 	@Override
@@ -230,7 +284,7 @@ public class DefaultAgent implements IAgent, Serializable {
 		// TODO Auto-generated method stub
 		try
 	    {
-			FileOutputStream fileOut = new FileOutputStream(this.toString()+".ser");
+			FileOutputStream fileOut = new FileOutputStream("Default"+this.toString()+".ser");
 	       ObjectOutputStream out = new ObjectOutputStream(fileOut);
 	       out.writeObject(this);
 	       out.close();

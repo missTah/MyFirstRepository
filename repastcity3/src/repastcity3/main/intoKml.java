@@ -16,12 +16,14 @@ import de.micromata.opengis.kml.v_2_2_0.KmlFactory;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import de.micromata.opengis.kml.v_2_2_0.Units;
 import de.micromata.opengis.kml.v_2_2_0.Vec2;
+import repastcity3.agent.AgentClass;
 import repastcity3.agent.AgentFactory;
+import repastcity3.agent.DefaultAgent;
 import repastcity3.agent.Student;
 
 
 public class intoKml {
-	static int compteur;
+	static int compteurStudent, compteurAgent;
 
 	public intoKml(){
 
@@ -29,20 +31,23 @@ public class intoKml {
 
 	public void go() throws FileNotFoundException{
 
-		Student s = null;
-		AgentFactory f=null;
+		Student s = new Student();
+		DefaultAgent d =new DefaultAgent();
 
 		de.micromata.opengis.kml.v_2_2_0.Kml kml = de.micromata.opengis.kml.v_2_2_0.KmlFactory.createKml();
 
-		java.time.Instant dt;
+		java.time.Instant dt = null;
 		de.micromata.opengis.kml.v_2_2_0.Document document = kml.createAndSetDocument().withName("MyMarkers");
-		compteur=AgentFactory.CompteurStudent;
+		List<com.vividsolutions.jts.geom.Coordinate> current;
+		List<Instant> currentListTmstp;
+		compteurStudent=AgentFactory.nbrStudent;
+		compteurAgent=AgentFactory.nbrDefaultAgent;
 
-		for(int l=0;l<compteur;l++)
+		for(int l=0;l<compteurStudent;l++)
 		{
 			try
 			{
-				FileInputStream fileIn = new FileInputStream("Agent "+l+".ser");
+				FileInputStream fileIn = new FileInputStream("StudentAgent "+l+".ser");
 				ObjectInputStream in = new ObjectInputStream(fileIn);
 				s = (Student) in.readObject();
 				in.close();
@@ -59,14 +64,60 @@ public class intoKml {
 			}
 
 
-			System.out.println("Deserialized Student...");
-			System.out.println("Serial number: " + s.uniqueID);
-			System.out.println("Name: " + s.toString());
-			List<com.vividsolutions.jts.geom.Coordinate> current;
-			List<Instant> currentListTmstp;
+
+
+
 			String couleur=generateColor();
 
 			for(int i = 0; i < s.getpathSchedule().size(); i++) {
+				current=s.getpathSchedule().get(i);
+				currentListTmstp=s.getAllTimeStamp().get(i);
+				int a=0;
+
+				for(int j = 0; j < current.size(); j++){
+
+					export("http://maps.google.com/mapfiles/ms/icons/cabs.png",current, currentListTmstp, s, dt, document, couleur, j, a);
+				}
+			}
+		}
+			
+			
+			//=====================DefaultAgent=========================
+			for(int m=0;m<compteurAgent;m++)
+			{
+				try
+				{
+					FileInputStream fileIn = new FileInputStream("DefaultAgent "+m+".ser");
+					ObjectInputStream in = new ObjectInputStream(fileIn);
+					d = (DefaultAgent) in.readObject();
+					in.close();
+					fileIn.close();
+				}catch(IOException i)
+				{
+					i.printStackTrace();
+					return;
+				}catch(ClassNotFoundException c)
+				{
+					System.out.println("DefaultAgent class not found");
+					c.printStackTrace();
+					return;
+				}
+
+				String couleur=generateColor();
+				for(int i = 0; i < d.getpathSchedule().size(); i++) {
+					current=d.getpathSchedule().get(i);
+					currentListTmstp=d.getAllTimeStamp().get(i);
+					int a=0;
+
+					for(int j = 0; j < current.size(); j++){
+
+						export("http://maps.google.com/mapfiles/kml/shapes/cycling.png",current, currentListTmstp, s, dt, document, couleur, j, a);
+					}
+				}
+			
+
+
+			/*		for(int i = 0; i < s.getpathSchedule().size(); i++) {
 				current=s.getpathSchedule().get(i);
 				currentListTmstp=s.getAllTimeStamp().get(i);
 				int a=0;
@@ -125,10 +176,66 @@ public class intoKml {
 
 			}
 
-		}
-		kml.marshal(new File("HelloTahina.kml"));
+			 */	}
 
 
+		kml.marshal(new File("Simulation.kml"));
+
+
+
+
+	}
+
+
+	public void export(String link,List<com.vividsolutions.jts.geom.Coordinate> current,List<Instant> currentListTmstp, AgentClass s,java.time.Instant dt, de.micromata.opengis.kml.v_2_2_0.Document document, String couleur, int j, int a){
+
+
+
+		Placemark placemark = KmlFactory.createPlacemark();
+		//placemark.setName(s.toString());
+		//placemark.setVisibility(true);
+		//placemark.setOpen(false);
+		//placemark.setDescription("Un placemarque");
+		//placemark.setStyleUrl("styles.kml#jugh_style");
+
+
+		// Create <Point> and set values.
+		de.micromata.opengis.kml.v_2_2_0.Point point = KmlFactory.createPoint();
+		//point.setExtrude(false);
+		//point.setAltitudeMode(AltitudeMode.CLAMP_TO_GROUND);
+
+
+		point.getCoordinates().add(new Coordinate(current.get(j).x,current.get(j).y));
+		placemark.setGeometry(point);
+
+		//TimeStamp format
+		//SimpleDateFormat timestp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"+a+"'Z'");
+
+		dt=currentListTmstp.get(j);
+		placemark.createAndSetTimeStamp().setWhen(dt.toString());
+
+		// IconStyle
+		IconStyle ic= placemark.createAndAddStyle().createAndSetIconStyle();
+		ic.setHeading(1);
+		ic.setScale(0.5);
+		ic.setColor(couleur);
+		Vec2 vc=new Vec2();
+		vc.setX(0);
+		vc.setY(0.5);
+		vc.setXunits(Units.FRACTION);
+		vc.setYunits(Units.FRACTION);
+		ic.setHotSpot(vc);
+
+		//Icon
+		Icon icone=ic.createAndSetIcon();
+		icone.setRefreshInterval(0.5);
+		icone.setViewRefreshTime(0.5);
+		icone.setHref(link);
+
+		document.addToFeature(placemark);
+
+
+		a++;
 
 
 	}
@@ -143,6 +250,8 @@ public class intoKml {
 		String RandomRGB2Hex = Integer.toHexString(RandomRGB);
 		return RandomRGB2Hex;
 	}
+
+
 
 
 }

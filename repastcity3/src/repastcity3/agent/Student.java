@@ -39,7 +39,7 @@ import repastcity3.exceptions.NoIdentifierException;
 import repastcity3.main.ContextManager;
 
 
-public class Student implements IAgent,java.io.Serializable{
+public class Student extends AgentClass{
 
 	private static Logger LOGGER = Logger.getLogger(DefaultAgent.class.getName());
 
@@ -277,7 +277,7 @@ public class Student implements IAgent,java.io.Serializable{
 	public void serialiseMe(){ 
 		try
 		{
-			FileOutputStream fileOut = new FileOutputStream(this.toString()+".ser");
+			FileOutputStream fileOut = new FileOutputStream("Student"+this.toString()+".ser");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(this);
 			out.close();

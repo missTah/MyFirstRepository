@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with RepastCity.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package repastcity3.main;
 
@@ -23,10 +23,7 @@ package repastcity3.main;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -37,7 +34,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
@@ -48,7 +44,6 @@ import repast.simphony.context.space.graph.NetworkBuilder;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
-import repast.simphony.engine.schedule.Schedule;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.space.gis.Geography;
@@ -57,7 +52,6 @@ import repast.simphony.space.gis.SimpleAdder;
 import repast.simphony.space.graph.Network;
 import repastcity3.agent.AgentFactory;
 import repastcity3.agent.IAgent;
-import repastcity3.agent.Student;
 import repastcity3.agent.ThreadedAgentScheduler;
 import repastcity3.environment.Building;
 import repastcity3.environment.GISFunctions;
@@ -81,14 +75,14 @@ public class ContextManager implements ContextBuilder<Object> {
 	 * A logger for this class. Note that there is a static block that is used to configure all logging for the model
 	 * (at the bottom of this file).
 	 */
-	
+
 	private static Logger LOGGER = Logger.getLogger(ContextManager.class.getName());
 
 	// Optionally force agent threading off (good for debugging)
 	private static final boolean TURN_OFF_THREADING = false;;
 
 	private static Properties properties;
-	
+
 
 	/*
 	 * Pointers to contexts and projections (for convenience). Most of these can be made public, but the agent ones
@@ -111,15 +105,15 @@ public class ContextManager implements ContextBuilder<Object> {
 
 	private static Context<IAgent> agentContext;
 	private static Geography<IAgent> agentGeography;
-	
+
 
 	@Override
 	public Context<Object> build(Context<Object> con) {
-		
+
 
 		RepastCityLogging.init();
-		
-		
+
+
 		// Keep a useful static link to the main context
 		mainContext = con;
 
@@ -217,7 +211,7 @@ public class ContextManager implements ContextBuilder<Object> {
 			AgentFactory agentFactory = new AgentFactory(agentDefn);
 			agentFactory.createAgents(agentContext);
 
-			
+
 			//===================================
 			String agentDefnStud = ContextManager.getParameter(MODEL_PARAMETERS.STUDENT_DEFINITION.toString());
 
@@ -225,9 +219,9 @@ public class ContextManager implements ContextBuilder<Object> {
 
 			AgentFactory agentFactoryStud = new AgentFactory(agentDefnStud);
 			agentFactoryStud.createAgents(agentContext);
-			
-			
-			
+
+
+
 			//=================================
 		} catch (ParameterNotFoundException e) {
 			LOGGER.log(Level.SEVERE, "Could not find the parameter which defines how agents should be "
@@ -241,8 +235,8 @@ public class ContextManager implements ContextBuilder<Object> {
 
 		// Create the schedule
 		createSchedule();
-		
-		
+
+
 
 		return mainContext;
 	}
@@ -256,19 +250,19 @@ public class ContextManager implements ContextBuilder<Object> {
 		return l;
 	}
 
-	
+
 	private void createSchedule() {
 		ISchedule schedule = RunEnvironment.getInstance().getCurrentSchedule();
 
 		// Schedule something that outputs ticks every 1000 iterations.
 		schedule.schedule(ScheduleParameters.createRepeating(1, 1000, ScheduleParameters.LAST_PRIORITY), this,
 				"printTicks");
-		
+
 		// Run a method at the end of the simulation======================================================================
-		
-				ScheduleParameters stop = ScheduleParameters.createAtEnd(ScheduleParameters.LAST_PRIORITY);
-				schedule.schedule(stop, this, "endMethod");
-				
+
+		ScheduleParameters stop = ScheduleParameters.createAtEnd(ScheduleParameters.LAST_PRIORITY);
+		schedule.schedule(stop, this, "endMethod");
+
 		/*
 		 * Schedule the agents. This is slightly complicated because if all the agents can be stepped at the same time
 		 * (i.e. there are no inter- agent communications that make this difficult) then the scheduling is controlled by
@@ -350,7 +344,7 @@ public class ContextManager implements ContextBuilder<Object> {
 		} else {
 			String val = ContextManager.properties.getProperty(property);
 			if (val == null || val.equals("")) { // No value exists in the
-													// properties file
+				// properties file
 				throw new RuntimeException("checkProperty() error, the required property (" + property + ") is "
 						+ (property == null ? "null" : "empty"));
 			}
@@ -562,7 +556,7 @@ public class ContextManager implements ContextBuilder<Object> {
 	 * @param  
 	 */
 
-	
+
 	public static Context<IAgent> getAgentContext() {
 		return ContextManager.agentContext;
 	}
@@ -579,12 +573,12 @@ public class ContextManager implements ContextBuilder<Object> {
 	public static Geography<IAgent> getAgentGeography() {
 		return ContextManager.agentGeography;
 	}
-	
+
 	public void endMethod() throws Exception{
-	//	ContextManager.getParameter(paramName)
+		//	ContextManager.getParameter(paramName)
 		/*int compteur=AgentFactory.CompteurStudent;
 		System.out.println("Le nombre d'étudiant est de "+compteur);
-		
+
 		Student s = null;
 		for(int l=0;l<compteur;l++)
 		{
@@ -605,27 +599,27 @@ public class ContextManager implements ContextBuilder<Object> {
 	         c.printStackTrace();
 	         return;
 	      }
-	      
+
 
 	      System.out.println("Deserialized Student...");
 	      System.out.println("Serial number: " + s.uniqueID);
 	      System.out.println("Name: " + s.toString());
 	     /* List<Coordinate> current;
-	          
+
 	     for(int i = 0; i < s.getpathSchedule().size(); i++) {
 	    	 current=s.getpathSchedule().get(i);
 				for(int j = 0; j < current.size(); j++){
 					System.out.println(s.toString()+" Voici le contenu de la route, trajet numero "+i+" coordonnées "+current.get(j));		
-					
+
 	     }
-				
+
 	     }
 		}*/
-	    /* exportIntoKml exp=new exportIntoKml(s.getpathSchedule());
+		/* exportIntoKml exp=new exportIntoKml(s.getpathSchedule());
 	     exp.featureCollectionToKML();*/
 		/*Deserialise d=new Deserialise(AgentFactory.CompteurStudent);
 		d.GoDeserialise();*/
-		
+
 		intoKml ceci=new intoKml();
 		try {
 			ceci.go();
@@ -633,11 +627,25 @@ public class ContextManager implements ContextBuilder<Object> {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-			     
-	     System.out.println("End of the simulation");
-		
+		for(int i=0;i<=AgentFactory.nbrStudent;i++){
+
+			File file=new File("StudentAgent "+i+".ser");
+			System.out.println("deleting files StudentAgent "+i+".ser");
+			file.delete();
+
+		}
+		for(int i=0;i<=AgentFactory.nbrDefaultAgent;i++){
+
+			File file=new File("DefaultAgent "+i+".ser");
+			System.out.println("deleting files DefaultAgent "+i+".ser");
+			file.delete();
+
+		}
+
+		System.out.println("End of the simulation");
+
 	}
-	
-	
+
+
 
 }
