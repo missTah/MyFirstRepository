@@ -2,37 +2,20 @@ package repastcity3.agent;
 
 
 
-import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.feature.DefaultFeatureCollection;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.kml.v22.KML;
-import org.geotools.kml.v22.KMLConfiguration;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.geotools.xml.Encoder;
-import org.opengis.feature.simple.SimpleFeatureType;
-
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.io.ParseException;
 
-import repast.simphony.engine.environment.RunEnvironment;
-import repast.simphony.engine.schedule.ISchedule;
-import repast.simphony.engine.schedule.ScheduleParameters;
 import repastcity3.environment.Building;
 import repastcity3.environment.Route;
 import repastcity3.exceptions.NoIdentifierException;
@@ -52,7 +35,7 @@ public class Student extends AgentClass{
 	private int id;
 	private static int compteur=0;
 
-	//list that content the coordinate of the current position of the agent
+	//list that content the coordinates of the current position of the agent
 	private List<Coordinate> currentCoord;
 	private List<Instant> currentTimeStamp;
 
@@ -90,9 +73,9 @@ public class Student extends AgentClass{
 			this.route = new Route(this, b.getCoords(), b);
 
 
-			System.out.println(this.toString() + " created new route to " + b.toString());
+			
 			LOGGER.log(Level.FINE, this.toString() + " created new route to " + b.toString());
-			System.out.println("created new route to " + b.toString());
+			
 		}
 
 		if (!this.route.atDestination()) {
@@ -101,18 +84,18 @@ public class Student extends AgentClass{
 			//Pick up the trajectory of the agent from his current place to his destination
 			setCurrentRoute();
 			setCurrentTimeStamp();
-			
+
 			setpathSchedule(compteur);
 			setAllTimeStamp(compteur,currentTimeStamp);
 
 
 			LOGGER.log(Level.FINE, this.toString() + " travelling to " + this.route.getDestinationBuilding().toString());
 		} else {
-			
+
 			//Store all the trajectory of the agent inside an arrayList
 			compteur++;
-			
-			
+
+
 
 
 
@@ -128,7 +111,7 @@ public class Student extends AgentClass{
 
 
 				this.route = new Route(this, b.getCoords(), b);
-				System.out.println("created new route to " + b.toString());
+				
 
 
 
@@ -141,7 +124,7 @@ public class Student extends AgentClass{
 						+ ", now going home");
 				this.goingHome = true;
 				this.route = new Route(this, this.home.getCoords(), this.home);
-				System.out.println("created new route to " + b.toString());
+				
 			}
 
 
@@ -158,9 +141,9 @@ public class Student extends AgentClass{
 		int choice = randomGenerator.nextInt(4);*/
 		do{
 			b = ContextManager.buildingContext.getRandomObject();
-			//System.out.println("Ooooooooooo: "+ b.getCommune());
+			
 		} while(b.getCommune()!=a);
-		//System.out.println("OLAH OLAH OLAH: "+ b.getCommune());
+		
 		return b;	
 
 	}
@@ -184,7 +167,7 @@ public class Student extends AgentClass{
 		{
 			this.allTimeStamps.set(compt,currentTimeStamp2);
 		}
-		
+
 	}
 
 	public ArrayList<List<Instant>> getAllTimeStamp(){
@@ -193,27 +176,14 @@ public class Student extends AgentClass{
 
 	//Store all the trajectory of the agent inside an arrayList
 	public void setpathSchedule(int compt) throws FileNotFoundException{
-		System.out.println("PATHSCHEDULE SIZE...."+this.pathschedule.size());
 		//List<Coordinate> current;
 		if (this.pathschedule.size()==compt){
 			this.pathschedule.add(currentCoord);
-			
+
 		}
 		else{
 			this.pathschedule.set(compt,currentCoord);
 		}
-		
-		/*for(int i = 0; i < this.pathschedule.size(); i++) {
-			current=this.pathschedule.get(i);
-			for(int j = 0; j < current.size(); j++){
-				System.out.println(this.toString()+" Voici le contenu de la route, trajet numero "+i+" coordonnées "+current.get(j));		
-
-			}
-			System.out.println("PAUSE");
-	};*/
-
-
-
 
 
 	}
@@ -282,11 +252,11 @@ public class Student extends AgentClass{
 			out.writeObject(this);
 			out.close();
 			fileOut.close();
-			System.out.println("Serialized data is saved for Student "+this.toString());
+			
 		}catch(IOException i)
 		{
 			i.printStackTrace();
-			System.out.println("Serialisation failed for Student"+this.toString());
+			
 		}
 	}
 
@@ -295,65 +265,5 @@ public class Student extends AgentClass{
 		// TODO Auto-generated method stub
 
 	}
-
-
-	//=====================================KML export========================================
-
-
-
-
-
-	/*private SimpleFeatureCollection createSampleFeatures() throws ParseException {
-        SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-        typeBuilder.setName("cities");
-        typeBuilder.add("geometry", Point.class, DefaultGeographicCRS.WGS84);
-        typeBuilder.add("name", String.class);
-
-
-        SimpleFeatureType TYPE = typeBuilder.buildFeatureType();    
-        GeometryFactory gf = new GeometryFactory();     
-        DefaultFeatureCollection features = new DefaultFeatureCollection();
-
-        List<Coordinate> current;
-        for(int i = 0; i < this.pathschedule.size(); i++) {
-        	current=this.pathschedule.get(i);
-
-        	for(int j = 0; j < current.size(); j++){
-        		features.add( SimpleFeatureBuilder.build( TYPE, new Object[]{gf.createPoint(current.get(j))}, null) );
-
-        		//System.out.println(this.toString()+" Voici le contenu de la route, trajet numero "+i+" coordonnées "+current.get(j));
-        	}
-        }
-        //  WKTReader2 wkt = new WKTReader2();
-
-        //features.add( SimpleFeatureBuilder.build( TYPE, new Object[]{gf.createPoint(new Coordinate(-0.126236,51.500152)), "name1"}, null) );
-        //features.add( SimpleFeatureBuilder.build( TYPE, new Object[]{ wkt.read("POINT(4 4)"), "name2"}, null) );
-
-        return features;
-    }
-
-	private void featureCollectionToKML() throws Exception {
-        SimpleFeatureCollection features = createSampleFeatures();
-        FileOutputStream lFileOutputStream = new FileOutputStream(new File("Hello.kml"));
-        Encoder encoder = new Encoder(new KMLConfiguration());
-        encoder.setIndenting(true);
-        encoder.encode(features, KML.kml, lFileOutputStream );
-        lFileOutputStream.close();
-    }
-
-	 */
-
-
-
-	/*private Building randomHome(int a) throws NumberFormatException, NoIdentifierException{
-		Building b;
-		do{
-			b = ContextManager.buildingContext.getRandomObject();
-		} while(b.getCommune()!=a);
-		System.out.println("OLAH OLAH OLAH: GO WORK "+ b.getCommune());
-			return b;	
-
-	}*/
-
 
 }

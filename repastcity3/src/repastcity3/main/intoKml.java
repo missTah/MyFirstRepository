@@ -43,6 +43,7 @@ public class intoKml {
 		compteurStudent=AgentFactory.nbrStudent;
 		compteurAgent=AgentFactory.nbrDefaultAgent;
 
+		//=========================================Student==========================================
 		for(int l=0;l<compteurStudent;l++)
 		{
 			try
@@ -80,106 +81,46 @@ public class intoKml {
 				}
 			}
 		}
-			
-			
-			//=====================DefaultAgent=========================
-			for(int m=0;m<compteurAgent;m++)
+
+
+		//=====================DefaultAgent=========================
+		for(int m=0;m<compteurAgent;m++)
+		{
+			try
 			{
-				try
-				{
-					FileInputStream fileIn = new FileInputStream("DefaultAgent "+m+".ser");
-					ObjectInputStream in = new ObjectInputStream(fileIn);
-					d = (DefaultAgent) in.readObject();
-					in.close();
-					fileIn.close();
-				}catch(IOException i)
-				{
-					i.printStackTrace();
-					return;
-				}catch(ClassNotFoundException c)
-				{
-					System.out.println("DefaultAgent class not found");
-					c.printStackTrace();
-					return;
-				}
+				FileInputStream fileIn = new FileInputStream("DefaultAgent "+m+".ser");
+				ObjectInputStream in = new ObjectInputStream(fileIn);
+				d = (DefaultAgent) in.readObject();
+				in.close();
+				fileIn.close();
+			}catch(IOException i)
+			{
+				i.printStackTrace();
+				return;
+			}catch(ClassNotFoundException c)
+			{
+				System.out.println("DefaultAgent class not found");
+				c.printStackTrace();
+				return;
+			}
 
-				String couleur=generateColor();
-				for(int i = 0; i < d.getpathSchedule().size(); i++) {
-					current=d.getpathSchedule().get(i);
-					currentListTmstp=d.getAllTimeStamp().get(i);
-					int a=0;
-
-					for(int j = 0; j < current.size(); j++){
-
-						export("http://maps.google.com/mapfiles/kml/shapes/cycling.png",current, currentListTmstp, s, dt, document, couleur, j, a);
-					}
-				}
-			
-
-
-			/*		for(int i = 0; i < s.getpathSchedule().size(); i++) {
-				current=s.getpathSchedule().get(i);
-				currentListTmstp=s.getAllTimeStamp().get(i);
+			String couleur=generateColor();
+			for(int i = 0; i < d.getpathSchedule().size(); i++) {
+				current=d.getpathSchedule().get(i);
+				currentListTmstp=d.getAllTimeStamp().get(i);
 				int a=0;
 
 				for(int j = 0; j < current.size(); j++){
 
-
-					Placemark placemark = KmlFactory.createPlacemark();
-					//placemark.setName(s.toString());
-					//placemark.setVisibility(true);
-					//placemark.setOpen(false);
-					//placemark.setDescription("Un placemarque");
-					//placemark.setStyleUrl("styles.kml#jugh_style");
-
-
-					// Create <Point> and set values.
-					de.micromata.opengis.kml.v_2_2_0.Point point = KmlFactory.createPoint();
-					//point.setExtrude(false);
-					//point.setAltitudeMode(AltitudeMode.CLAMP_TO_GROUND);
-
-
-					point.getCoordinates().add(new Coordinate(current.get(j).x,current.get(j).y));
-					placemark.setGeometry(point);
-
-					//TimeStamp format
-					//SimpleDateFormat timestp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"+a+"'Z'");
-
-					dt=currentListTmstp.get(j);
-					placemark.createAndSetTimeStamp().setWhen(dt.toString());
-
-					// IconStyle
-					IconStyle ic= placemark.createAndAddStyle().createAndSetIconStyle();
-					ic.setHeading(1);
-					ic.setScale(0.5);
-					ic.setColor(couleur);
-					Vec2 vc=new Vec2();
-					vc.setX(0);
-					vc.setY(0.5);
-					vc.setXunits(Units.FRACTION);
-					vc.setYunits(Units.FRACTION);
-					ic.setHotSpot(vc);
-
-					//Icon
-					Icon icone=ic.createAndSetIcon();
-					icone.setRefreshInterval(0.5);
-					icone.setViewRefreshTime(0.5);
-					icone.setHref("http://maps.google.com/mapfiles/ms/icons/cabs.png");
-
-					document.addToFeature(placemark);
-
-
-					a++;
-
+					export("http://maps.google.com/mapfiles/kml/shapes/woman.png",current, currentListTmstp, s, dt, document, couleur, j, a);
 				}
-
-
 			}
 
-			 */	}
+		}
 
 
 		kml.marshal(new File("Simulation.kml"));
+		System.out.println("==========================Export done=====================");
 
 
 

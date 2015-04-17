@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with RepastCity.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package repastcity3.agent;
 
@@ -94,46 +94,45 @@ public class DefaultAgent extends AgentClass {
 			}
 
 		}*/
-		
-		
+
+
 		Building b= ContextManager.buildingContext.getRandomObject();
-		
+
 		// TODO Auto-generated method stub
 		LOGGER.log(Level.FINE, "Agent " + this.id + " is stepping.");
 		if (this.route == null) {
 			this.goingHome = false; // Must be leaving home
 			// Choose a new building to go to
 			b = randomBuilding(3);
-			
-			
+
+
 			this.route = new Route(this, b.getCoords(), b);
-			
-									
-			System.out.println(this.toString() + " created new route to " + b.toString());
+
+
 			LOGGER.log(Level.FINE, this.toString() + " created new route to " + b.toString());
 		}
-		
+
 		if (!this.route.atDestination()) {
 			this.route.travel();
-			
-			//Pick up the trajectory of the agent from his current place to his destination
-			setCurrentRoute();
-			setCurrentTimeStamp();
-			
-			setpathSchedule(compteur);
-			setAllTimeStamp(compteur,currentTimeStamp);
-			
-			
+
+
+			setCurrentRoute();//Pick up the trajectory of the agent from his current place to his destination
+			setCurrentTimeStamp();// Pick up the timestamp from the agent's current place to his desrination
+
+			setpathSchedule(compteur);//Pick up all the agent trajectory during the simulatiob
+			setAllTimeStamp(compteur,currentTimeStamp);//pick up all the agent timestamp during the simulation
+
+
 			LOGGER.log(Level.FINE, this.toString() + " travelling to " + this.route.getDestinationBuilding().toString());
 		} else {
 			//Store all the trajectory of the agent inside an arrayList
-			
+
 			compteur++;
 			//this.featureCollectionToKML();
-		
 
-			
-			
+
+
+
 			// Have reached destination, now either go home or onto another building
 			if (this.goingHome) {
 				this.goingHome = false;
@@ -141,13 +140,13 @@ public class DefaultAgent extends AgentClass {
 				int choice = randomGenerator.nextInt(3);
 				b = randomBuilding(choice);*/
 				b= randomBuilding(3);
-				
-				
-								
+
+
+
 				this.route = new Route(this, b.getCoords(), b);
-				
-				
-				
+
+
+
 				System.out.println(this.toString() + " reached home, now going to " + b.toString());
 				LOGGER.log(Level.FINE, this.toString() + " reached home, now going to " + b.toString());
 			} else {
@@ -158,11 +157,11 @@ public class DefaultAgent extends AgentClass {
 				this.goingHome = true;
 				this.route = new Route(this, this.home.getCoords(), this.home);
 			}
-			
+
 
 		}
 		serialiseMe();
-		
+
 
 	} // step()
 
@@ -211,23 +210,27 @@ public class DefaultAgent extends AgentClass {
 		return this.id;
 	}
 
+	//Choose a random building
 	public Building randomBuilding(int a) throws NumberFormatException, NoIdentifierException{
 		Building b;
 		/*Random randomGenerator = new Random();
 		int choice = randomGenerator.nextInt(4);*/
 		do{
 			b = ContextManager.buildingContext.getRandomObject();
-			//System.out.println("Ooooooooooo: "+ b.getCommune());
+
 		} while(b.getCommune()!=a);
-		//System.out.println("OLAH OLAH OLAH: "+ b.getCommune());
-			return b;
+
+		return b;
 	}
+
+	//set the current agent trajectory
 	public void setCurrentRoute() {
 
 		this.currentCoord=this.route.getListRoute();
 
 	}
 
+	//set the current agent timestamp(for the KML export)
 	public void setCurrentTimeStamp(){
 		this.currentTimeStamp=this.route.getTimeStamp();
 	}
@@ -240,36 +243,22 @@ public class DefaultAgent extends AgentClass {
 		{
 			this.allTimeStamps.set(compt,currentTimeStamp2);
 		}
-		
+
 	}
 
 	public ArrayList<List<Instant>> getAllTimeStamp(){
 		return this.allTimeStamps;
 	}
-	
+
 	public void setpathSchedule(int compt) throws FileNotFoundException{
-		System.out.println("PATHSCHEDULE SIZE...."+this.pathschedule.size());
-		//List<Coordinate> current;
+
 		if (this.pathschedule.size()==compt){
 			this.pathschedule.add(currentCoord);
-			
+
 		}
 		else{
 			this.pathschedule.set(compt,currentCoord);
 		}
-		
-		/*for(int i = 0; i < this.pathschedule.size(); i++) {
-			current=this.pathschedule.get(i);
-			for(int j = 0; j < current.size(); j++){
-				System.out.println(this.toString()+" Voici le contenu de la route, trajet numero "+i+" coordonnées "+current.get(j));		
-
-			}
-			System.out.println("PAUSE");
-	};*/
-
-
-
-
 
 	}
 
@@ -279,33 +268,34 @@ public class DefaultAgent extends AgentClass {
 		return this.pathschedule;
 	}
 
+	//Serialise this agent
 	@Override
 	public void serialiseMe() {
 		// TODO Auto-generated method stub
 		try
-	    {
+		{
 			FileOutputStream fileOut = new FileOutputStream("Default"+this.toString()+".ser");
-	       ObjectOutputStream out = new ObjectOutputStream(fileOut);
-	       out.writeObject(this);
-	       out.close();
-	       fileOut.close();
-	       System.out.printf("Serialized data is saved for DefaultAgent "+this.toString());
-	    }catch(IOException i)
-	    {
-	        i.printStackTrace();
-	        System.out.printf("Serialization failed for DefaultAgent "+this.toString());
-	    }
-		
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(this);
+			out.close();
+			fileOut.close();
+
+		}catch(IOException i)
+		{
+			i.printStackTrace();
+
+		}
+
 	}
 
-	
+
 
 	@Override
 	public void getCurrentRoute() {
 		this.currentCoord=this.route.getListRoute();
-		
+
 	}
 
-	
+
 
 }

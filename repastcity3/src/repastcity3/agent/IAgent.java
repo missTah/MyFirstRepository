@@ -99,6 +99,7 @@ public interface IAgent {
 	//Return the arrayList of all the agent trajectories
 	public ArrayList<List<Coordinate>> getpathSchedule();
 	
+	//For serialisation
 	public void serialiseMe();
 	
 

@@ -1,19 +1,10 @@
 package repastcity3.main;
 
-import java.awt.Button;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 
-import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.environment.RunListener;
 import repast.simphony.engine.environment.RunState;
-import repast.simphony.ui.RSApplication;
 import repast.simphony.userpanel.ui.UserPanelCreator;
 
 /**

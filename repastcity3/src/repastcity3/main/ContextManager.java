@@ -212,7 +212,7 @@ public class ContextManager implements ContextBuilder<Object> {
 			agentFactory.createAgents(agentContext);
 
 
-			//===================================
+			//=================================== =====================================================
 			String agentDefnStud = ContextManager.getParameter(MODEL_PARAMETERS.STUDENT_DEFINITION.toString());
 
 			LOGGER.log(Level.INFO, "Creating agents with the agent definition: '" + agentDefnStud + "'");
@@ -222,7 +222,7 @@ public class ContextManager implements ContextBuilder<Object> {
 
 
 
-			//=================================
+			//================================= ========================================================
 		} catch (ParameterNotFoundException e) {
 			LOGGER.log(Level.SEVERE, "Could not find the parameter which defines how agents should be "
 					+ "created. The parameter is called " + MODEL_PARAMETERS.AGENT_DEFINITION
@@ -575,51 +575,7 @@ public class ContextManager implements ContextBuilder<Object> {
 	}
 
 	public void endMethod() throws Exception{
-		//	ContextManager.getParameter(paramName)
-		/*int compteur=AgentFactory.CompteurStudent;
-		System.out.println("Le nombre d'étudiant est de "+compteur);
-
-		Student s = null;
-		for(int l=0;l<compteur;l++)
-		{
-	      try
-	      {
-	         FileInputStream fileIn = new FileInputStream("Agent "+l+".ser");
-	         ObjectInputStream in = new ObjectInputStream(fileIn);
-	         s = (Student) in.readObject();
-	         in.close();
-	         fileIn.close();
-	      }catch(IOException i)
-	      {
-	         i.printStackTrace();
-	         return;
-	      }catch(ClassNotFoundException c)
-	      {
-	         System.out.println("Student class not found");
-	         c.printStackTrace();
-	         return;
-	      }
-
-
-	      System.out.println("Deserialized Student...");
-	      System.out.println("Serial number: " + s.uniqueID);
-	      System.out.println("Name: " + s.toString());
-	     /* List<Coordinate> current;
-
-	     for(int i = 0; i < s.getpathSchedule().size(); i++) {
-	    	 current=s.getpathSchedule().get(i);
-				for(int j = 0; j < current.size(); j++){
-					System.out.println(s.toString()+" Voici le contenu de la route, trajet numero "+i+" coordonnées "+current.get(j));		
-
-	     }
-
-	     }
-		}*/
-		/* exportIntoKml exp=new exportIntoKml(s.getpathSchedule());
-	     exp.featureCollectionToKML();*/
-		/*Deserialise d=new Deserialise(AgentFactory.CompteurStudent);
-		d.GoDeserialise();*/
-
+		
 		intoKml ceci=new intoKml();
 		try {
 			ceci.go();
@@ -637,7 +593,7 @@ public class ContextManager implements ContextBuilder<Object> {
 		for(int i=0;i<=AgentFactory.nbrDefaultAgent;i++){
 
 			File file=new File("DefaultAgent "+i+".ser");
-			System.out.println("deleting files DefaultAgent "+i+".ser");
+			System.out.println("deleting file DefaultAgent "+i+".ser");
 			file.delete();
 
 		}

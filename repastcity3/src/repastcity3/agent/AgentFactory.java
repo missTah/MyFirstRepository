@@ -274,7 +274,7 @@ public class AgentFactory {
 		int numAgents = 0;
 		for (IAgent a : ContextManager.getAllAgents()) {
 			numAgents++;
-			nbrDefaultAgent=numAgents;
+			nbrDefaultAgent=numAgents;//pick up the total of defaultAgent
 			//TotalAgent=nbrStudent+nbrDefaultAgent;
 			Geometry g = ContextManager.getAgentGeometry(a);
 			for (Building b : SpatialIndexManager.search(ContextManager.buildingProjection, g)) {

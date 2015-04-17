@@ -42,12 +42,10 @@ import org.geotools.referencing.GeodeticCalculator;
 
 import cern.colt.Arrays;
 
-import com.ibm.icu.text.SimpleDateFormat;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 
@@ -75,10 +73,10 @@ import repastcity3.main.GlobalVars;
  */
 public class Route implements Cacheable, Serializable {
 
-	
+
 	//List of the timeStamp
 	private List<Instant>tmstp=new ArrayList<Instant>();
-	
+
 	private static Logger LOGGER = Logger.getLogger(Route.class.getName());
 
 	static {
@@ -403,7 +401,7 @@ public class Route implements Cacheable, Serializable {
 		}
 	}
 
-	
+
 	public List<Instant>getTimeStamp(){
 		return tmstp;
 	}
@@ -436,11 +434,10 @@ public class Route implements Cacheable, Serializable {
 		if (this.routeX == null) {
 			this.setRoute();
 			//agentRoute=routeX;
-			}
+		}
 		try {
 			if (this.atDestination()) {
 				Instant instant = Instant.now();
-				System.out.println("================================le temps à destination est: "+instant);
 				tmstp.add(instant);
 				return;
 			}
@@ -462,13 +459,11 @@ public class Route implements Cacheable, Serializable {
 			while (!travelledMaxDist && !this.atDestination()) {
 				target = this.routeX.get(this.currentPosition);
 				speed = this.routeSpeedsX.get(this.currentPosition);
-				
-				
+
+
 				//Pick up the current instant
 				Instant instant = Instant.now();
-				System.out.println("================================le temps est: "+instant);
 				agentRoute.add(currentCoord);
-				System.out.println("POSITION ACTUELLE: "+currentCoord);
 				tmstp.add(instant);
 				/*
 				 * TODO Remember which roads have been passed, used to work out what should be added to cognitive map.
