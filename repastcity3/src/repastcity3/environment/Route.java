@@ -98,6 +98,8 @@ public class Route implements Cacheable, Serializable {
 	private int currentPosition;
 	private List<Coordinate> routeX;
 	private List<Double> routeSpeedsX;
+	
+	//Store the trajectory of the agent
 	private List<Coordinate> agentRoute=new ArrayList<Coordinate>();
 
 	//Create TimeStamp
@@ -368,7 +370,7 @@ public class Route implements Cacheable, Serializable {
 	 *            A description of why the coordinate has been added
 	 */
 	private void addToRoute(Coordinate coord, Road road, double speed, String description) {
-		//this.timestamp.add(javaCalendar.getTime());
+	
 		this.routeX.add(coord);
 		this.roadsX.add(road);
 		this.routeSpeedsX.add(speed);
@@ -393,7 +395,6 @@ public class Route implements Cacheable, Serializable {
 		for (Coordinate c : coords) {
 
 
-			//this.timestamp.add(javaCalendar.getTime());
 			this.routeX.add(c);
 			this.roadsX.add(road);
 			this.routeSpeedsX.add(speed);
@@ -461,9 +462,13 @@ public class Route implements Cacheable, Serializable {
 				speed = this.routeSpeedsX.get(this.currentPosition);
 
 
-				//Pick up the current instant
+				//Pick up the current instant ex: 2015-04-20T10:10:51.092Z
 				Instant instant = Instant.now();
+				
+				//add the curent Coordinate into the agentRoute list
 				agentRoute.add(currentCoord);
+				
+				//add the instant into the tmstp list
 				tmstp.add(instant);
 				/*
 				 * TODO Remember which roads have been passed, used to work out what should be added to cognitive map.

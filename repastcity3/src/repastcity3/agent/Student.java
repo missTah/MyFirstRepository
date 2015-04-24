@@ -113,7 +113,7 @@ public class Student extends AgentClass{
 				this.route = new Route(this, b.getCoords(), b);
 				
 
-
+				
 
 				System.out.println(this.toString() + " reached home, now going to " + b.toString());
 				LOGGER.log(Level.FINE, this.toString() + " reached home, now going to " + b.toString());
@@ -124,6 +124,7 @@ public class Student extends AgentClass{
 						+ ", now going home");
 				this.goingHome = true;
 				this.route = new Route(this, this.home.getCoords(), this.home);
+				
 				
 			}
 
@@ -160,12 +161,13 @@ public class Student extends AgentClass{
 	}
 
 	public void setAllTimeStamp(int compt, List<Instant> currentTimeStamp2){
-		if (this.allTimeStamps.size()==compt){
+		if (this.allTimeStamps.size()==compt || this.allTimeStamps.size()==0){
 			this.allTimeStamps.add(currentTimeStamp2);
 		}
 		else
 		{
-			this.allTimeStamps.set(compt,currentTimeStamp2);
+				this.allTimeStamps.set(this.allTimeStamps.size()-1,currentTimeStamp2);	
+			
 		}
 
 	}
@@ -177,16 +179,19 @@ public class Student extends AgentClass{
 	//Store all the trajectory of the agent inside an arrayList
 	public void setpathSchedule(int compt) throws FileNotFoundException{
 		//List<Coordinate> current;
-		if (this.pathschedule.size()==compt){
+		if (this.pathschedule.size()==compt || this.pathschedule.size()==0){
 			this.pathschedule.add(currentCoord);
 
 		}
 		else{
-			this.pathschedule.set(compt,currentCoord);
+			
+				this.pathschedule.set(this.pathschedule.size()-1,currentCoord);
+			
+			}
 		}
 
 
-	}
+	
 
 	//Return the arrayList of all the agent trajectories
 	public ArrayList<List<Coordinate>> getpathSchedule(){

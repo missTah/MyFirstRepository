@@ -125,7 +125,7 @@ public class DefaultAgent extends AgentClass {
 
 			LOGGER.log(Level.FINE, this.toString() + " travelling to " + this.route.getDestinationBuilding().toString());
 		} else {
-			//Store all the trajectory of the agent inside an arrayList
+		
 
 			compteur++;
 			//this.featureCollectionToKML();
@@ -241,7 +241,7 @@ public class DefaultAgent extends AgentClass {
 		}
 		else
 		{
-			this.allTimeStamps.set(compt,currentTimeStamp2);
+			this.allTimeStamps.set(this.allTimeStamps.size()-1,currentTimeStamp2);
 		}
 
 	}
@@ -257,7 +257,7 @@ public class DefaultAgent extends AgentClass {
 
 		}
 		else{
-			this.pathschedule.set(compt,currentCoord);
+			this.pathschedule.set(this.pathschedule.size()-1,currentCoord);
 		}
 
 	}
