@@ -51,6 +51,7 @@ import repast.simphony.space.gis.GeographyParameters;
 import repast.simphony.space.gis.SimpleAdder;
 import repast.simphony.space.graph.Network;
 import repastcity3.agent.AgentFactory;
+import repastcity3.main.WBPanel;
 import repastcity3.agent.IAgent;
 import repastcity3.agent.ThreadedAgentScheduler;
 import repastcity3.environment.Building;
@@ -576,12 +577,15 @@ public class ContextManager implements ContextBuilder<Object> {
 
 	public void endMethod() throws Exception{
 		
-		intoKml ceci=new intoKml();
+		File sim=new File("Simulation.kml");
+		if(!sim.exists()){
+		intoKml ceci=new intoKml(1);
 		try {
 			ceci.go();
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		}
 		}
 		for(int i=0;i<=AgentFactory.nbrStudent;i++){
 

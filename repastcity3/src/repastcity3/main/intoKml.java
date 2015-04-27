@@ -24,10 +24,19 @@ import repastcity3.agent.Student;
 
 public class intoKml {
 	static int compteurStudent, compteurAgent;
+	int pas;
 
-	public intoKml(){
+	public intoKml(int param){
+		if(param==0){
+			pas=1;
+		}
+		else{
+			pas=param;
+		}
+		System.out.println("Export into KML, time stamp: "+param);
 
 	}
+
 
 	public void go() throws FileNotFoundException{
 
@@ -75,7 +84,7 @@ public class intoKml {
 				currentListTmstp=s.getAllTimeStamp().get(i);
 				int a=0;
 
-				for(int j = 0; j < current.size(); j++){
+				for(int j = 0; j < current.size(); j=j+pas){
 
 					export("http://maps.google.com/mapfiles/ms/icons/cabs.png",current, currentListTmstp, s, dt, document, couleur, j, a);
 				}
@@ -110,7 +119,7 @@ public class intoKml {
 				currentListTmstp=d.getAllTimeStamp().get(i);
 				int a=0;
 
-				for(int j = 0; j < current.size(); j++){
+				for(int j = 0; j < current.size(); j=j+pas){
 
 					export("http://maps.google.com/mapfiles/kml/shapes/woman.png",current, currentListTmstp, s, dt, document, couleur, j, a);
 				}
@@ -129,8 +138,7 @@ public class intoKml {
 
 
 	public void export(String link,List<com.vividsolutions.jts.geom.Coordinate> current,List<Instant> currentListTmstp, AgentClass s,java.time.Instant dt, de.micromata.opengis.kml.v_2_2_0.Document document, String couleur, int j, int a){
-
-
+	
 
 		Placemark placemark = KmlFactory.createPlacemark();
 		//placemark.setName(s.toString());
