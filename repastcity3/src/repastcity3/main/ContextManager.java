@@ -20,6 +20,7 @@ package repastcity3.main;
 
 
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -106,11 +107,25 @@ public class ContextManager implements ContextBuilder<Object> {
 
 	private static Context<IAgent> agentContext;
 	private static Geography<IAgent> agentGeography;
+	
+	static ArrayList<String> defaultAgentColor = new ArrayList<String>();
+	static ArrayList<String> studentAgentColor = new ArrayList<String>();
 
 
 	@Override
 	public Context<Object> build(Context<Object> con) {
-
+		
+		//launch google earth and the .kml file
+		
+		try {
+			Runtime.getRuntime().exec(new String[] {
+			        "C:/Program Files (x86)/Google/Google Earth/client/googleearth.exe",
+			        "F:/ESIROI/Stage/Projet/MyFirstRepository/repastcity3/map.kml"
+			});
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		RepastCityLogging.init();
 
@@ -220,6 +235,24 @@ public class ContextManager implements ContextBuilder<Object> {
 
 			AgentFactory agentFactoryStud = new AgentFactory(agentDefnStud);
 			agentFactoryStud.createAgents(agentContext);
+			
+			
+			
+			//======================================Generate an array of COLOR===================================
+			
+			for(int i=0;i<AgentFactory.nbrDefaultAgent;i++)
+			{
+			defaultAgentColor.add(generateColor());
+			
+			}
+			
+
+			
+			for(int i=0;i<AgentFactory.nbrStudent;i++)
+			{
+			studentAgentColor.add(generateColor());
+			
+			}
 
 
 
@@ -605,6 +638,25 @@ public class ContextManager implements ContextBuilder<Object> {
 		System.out.println("End of the simulation");
 
 	}
+	
+	public static String generateColor(){
+		int red = (int) (( Math.random()*255)+1);
+		int green = (int) (( Math.random()*255)+1);
+		int blue = (int) (( Math.random()*255)+1);
+		Color RandomC = new Color(red,green,blue);
+		int RandomRGB = (RandomC.getRGB());
+		String RandomRGB2Hex = Integer.toHexString(RandomRGB);
+		return RandomRGB2Hex;
+	}
+	
+	public static ArrayList<String> getDefaultAgentColor(){
+		return defaultAgentColor;
+	}
+	
+	public static ArrayList<String> getStudentAgentColor(){
+		return studentAgentColor;
+	}
+
 
 
 

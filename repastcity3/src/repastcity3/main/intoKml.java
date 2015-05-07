@@ -14,8 +14,11 @@ import de.micromata.opengis.kml.v_2_2_0.Icon;
 import de.micromata.opengis.kml.v_2_2_0.IconStyle;
 import de.micromata.opengis.kml.v_2_2_0.KmlFactory;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
+import de.micromata.opengis.kml.v_2_2_0.RefreshMode;
 import de.micromata.opengis.kml.v_2_2_0.Units;
 import de.micromata.opengis.kml.v_2_2_0.Vec2;
+import de.micromata.opengis.kml.v_2_2_0.ViewRefreshMode;
+import de.micromata.opengis.kml.v_2_2_0.atom.Link;
 import repastcity3.agent.AgentClass;
 import repastcity3.agent.AgentFactory;
 import repastcity3.agent.DefaultAgent;
@@ -44,13 +47,34 @@ public class intoKml {
 		DefaultAgent d =new DefaultAgent();
 
 		de.micromata.opengis.kml.v_2_2_0.Kml kml = de.micromata.opengis.kml.v_2_2_0.KmlFactory.createKml();
-
 		java.time.Instant dt = null;
+		
+		//add the link 
+		//de.micromata.opengis.kml.v_2_2_0.Link lnk=kml.createAndSetNetworkLink().createAndSetLink();
+		de.micromata.opengis.kml.v_2_2_0.Link lnk = new de.micromata.opengis.kml.v_2_2_0.Link();
+		lnk.setHref("F:/ESIROI/Stage/Projet/MyFirstRepository/repastcity3/map.kml");
+		lnk.setRefreshMode(RefreshMode.ON_INTERVAL);
+		lnk.setRefreshInterval(1);
+		/*lnk.setViewRefreshMode(ViewRefreshMode.ON_REGION);
+		lnk.setViewRefreshTime(1);*/
+
+				
+		//Create the document tag
 		de.micromata.opengis.kml.v_2_2_0.Document document = kml.createAndSetDocument().withName("MyMarkers");
+		
+		//Create a link
+		//Link lnk = new Link("Simulation.kml");
+		
+		document.createAndAddNetworkLink().setLink(lnk);
+		
+		
 		List<com.vividsolutions.jts.geom.Coordinate> current;
 		List<Instant> currentListTmstp;
 		compteurStudent=AgentFactory.nbrStudent;
 		compteurAgent=AgentFactory.nbrDefaultAgent;
+		
+		
+		
 
 		//=========================================Student==========================================
 		for(int l=0;l<compteurStudent;l++)
@@ -74,10 +98,17 @@ public class intoKml {
 			}
 
 
+			String couleurStudent;
 
-
-
-			String couleur=generateColor();
+			if(ContextManager.getStudentAgentColor().size()==compteurStudent){
+				couleurStudent=ContextManager.getStudentAgentColor().get(l);
+			}
+			else{
+			//String couleur=generateColor();
+				System.out.println("Compt:"+compteurStudent);
+				System.out.println("SIZE: "+ContextManager.getStudentAgentColor().size());
+				couleurStudent=ContextManager.getStudentAgentColor().get(l-1);
+			}
 
 			for(int i = 0; i < s.getpathSchedule().size(); i++) {
 				current=s.getpathSchedule().get(i);
@@ -86,7 +117,7 @@ public class intoKml {
 
 				for(int j = 0; j < current.size(); j=j+pas){
 
-					export("http://maps.google.com/mapfiles/ms/icons/cabs.png",current, currentListTmstp, s, dt, document, couleur, j, a);
+					export("http://maps.google.com/mapfiles/ms/icons/cabs.png",current, currentListTmstp, s, dt, document, couleurStudent, j, a);
 				}
 			}
 		}
@@ -112,8 +143,18 @@ public class intoKml {
 				c.printStackTrace();
 				return;
 			}
+			
+			String couleurDefaultAgent;
 
-			String couleur=generateColor();
+			if(ContextManager.getDefaultAgentColor().size()==compteurAgent){
+				couleurDefaultAgent=ContextManager.getDefaultAgentColor().get(m);
+			}
+			else{
+				System.out.println("Compt:"+compteurAgent);
+				System.out.println("SIZE: "+ContextManager.getDefaultAgentColor().size());
+				couleurDefaultAgent=ContextManager.getDefaultAgentColor().get(m-1);
+			}
+			
 			for(int i = 0; i < d.getpathSchedule().size(); i++) {
 				current=d.getpathSchedule().get(i);
 				currentListTmstp=d.getAllTimeStamp().get(i);
@@ -121,7 +162,7 @@ public class intoKml {
 
 				for(int j = 0; j < current.size(); j=j+pas){
 
-					export("http://maps.google.com/mapfiles/kml/shapes/woman.png",current, currentListTmstp, s, dt, document, couleur, j, a);
+					export("http://maps.google.com/mapfiles/kml/shapes/woman.png",current, currentListTmstp, s, dt, document, couleurDefaultAgent, j, a);
 				}
 			}
 
@@ -190,7 +231,7 @@ public class intoKml {
 	}
 
 
-	public static String generateColor(){
+	/*public static String generateColor(){
 		int red = (int) (( Math.random()*255)+1);
 		int green = (int) (( Math.random()*255)+1);
 		int blue = (int) (( Math.random()*255)+1);
@@ -198,7 +239,7 @@ public class intoKml {
 		int RandomRGB = (RandomC.getRGB());
 		String RandomRGB2Hex = Integer.toHexString(RandomRGB);
 		return RandomRGB2Hex;
-	}
+	}*/
 
 
 

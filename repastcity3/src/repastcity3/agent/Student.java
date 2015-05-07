@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +19,7 @@ import repastcity3.environment.Building;
 import repastcity3.environment.Route;
 import repastcity3.exceptions.NoIdentifierException;
 import repastcity3.main.ContextManager;
+import repastcity3.main.intoKml;
 
 
 public class Student extends AgentClass{
@@ -80,7 +80,8 @@ public class Student extends AgentClass{
 
 		if (!this.route.atDestination()) {
 			this.route.travel();
-
+			intoKml exportSimulation=new intoKml(20);
+			exportSimulation.go();
 			//Pick up the trajectory of the agent from his current place to his destination
 			setCurrentRoute();
 			setCurrentTimeStamp();

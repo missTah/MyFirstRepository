@@ -39,10 +39,10 @@ public class WBPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public WBPanel() {
-
+		
 		btnPressMe = new JButton("Export into KML");
 		btnPressMe.setBounds(5, 100, 200, 25);
-
+		
 		//addActionListener for the button
 		btnPressMe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -50,7 +50,7 @@ public class WBPanel extends JPanel {
 				//Context context = RepastEssentials.FindContext("UserPanelProject");
 
 				//On click on the button, export the simulation into KML
-				int a= Integer.parseInt(txtTextPanel.getText());
+				int a = Integer.parseInt(txtTextPanel.getText());
 			
 				intoKml exportSimulation=new intoKml(a);
 				try {
